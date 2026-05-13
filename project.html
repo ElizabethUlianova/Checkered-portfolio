@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project — Lisa</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;600&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="project-page">
+
+  <!-- ── Custom cursor ───────────────────────────────────────────────────── -->
+  <div id="cursor"><span id="cursor-text"></span></div>
+
+  <!-- ── Notification toast ─────────────────────────────────────────────── -->
+  <div id="notification"></div>
+
+  <!-- ── Header (identical markup to index.html) ───────────────────────── -->
+  <header id="header">
+    <div class="h-left">
+      <div id="projects-btn">
+        <span>projects</span>
+        <div id="projects-dropdown"></div>
+      </div>
+    </div>
+
+    <div class="h-center">
+      <span id="linkedin-link" class="nav-link" role="button" tabindex="0">linkedin</span>
+    </div>
+
+    <div class="h-right">
+      <button id="email-btn" class="nav-link">email</button>
+    </div>
+  </header>
+
+  <!-- ── Project content ────────────────────────────────────────────────── -->
+  <main id="project-main">
+
+    <!-- Back to home -->
+    <a href="index.html" id="back-link" class="nav-link">
+      ← all projects
+    </a>
+
+    <!-- Hero image -->
+    <img id="project-hero" src="" alt="" />
+
+    <!-- Title + meta -->
+    <section id="project-info">
+      <h1 id="project-name"></h1>
+      <p  id="project-meta"></p>
+    </section>
+
+    <!-- Image gallery -->
+    <section id="project-gallery"></section>
+
+    <!-- Shown when no images exist (avito) -->
+    <p id="no-images">No case study images yet.</p>
+
+  </main>
+
+  <!-- ── Scripts ────────────────────────────────────────────────────────── -->
+  <script src="js/data.js"></script>
+  <script src="js/project.js"></script>
+
+</body>
+</html>

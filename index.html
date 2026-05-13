@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lisa — Principal Product Designer</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;600&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── Custom cursor ───────────────────────────────────────────────────── -->
+  <div id="cursor"><span id="cursor-text"></span></div>
+
+  <!-- ── Notification toast ─────────────────────────────────────────────── -->
+  <div id="notification"></div>
+
+  <!-- ── Zoom overlay (used during image→project transition) ──────────────── -->
+  <div id="zoom-overlay"></div>
+
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
+  <header id="header">
+    <div class="h-left">
+      <div id="projects-btn">
+        <span>projects</span>
+        <div id="projects-dropdown"></div>
+      </div>
+    </div>
+
+    <div class="h-center">
+      <span id="linkedin-link" class="nav-link" role="button" tabindex="0">linkedin</span>
+    </div>
+
+    <div class="h-right">
+      <button id="email-btn" class="nav-link">email</button>
+    </div>
+  </header>
+
+  <!-- ── Scene ──────────────────────────────────────────────────────────── -->
+  <main id="scene">
+    <!-- Images injected by main.js -->
+
+    <!-- Hero text (z-index 5; some images above, some below) -->
+    <div id="hero-text">
+      <p class="hero-name">Lisa</p>
+      <p class="hero-title">Principal<br>Product Designer</p>
+    </div>
+  </main>
+
+  <!-- ── Scripts ────────────────────────────────────────────────────────── -->
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>
