@@ -15,10 +15,6 @@
   --scale:    1;
 
   /* Derived sizes — all relative to 1440×1024 baseline */
-  --pt-w:         calc(241px * var(--scale));
-  --pt-h:         calc(450px * var(--scale));
-  --ls-w:         calc(806px * var(--scale));
-  --ls-h:         calc(570px * var(--scale));
   --font-hero:    calc(80px  * var(--scale));
   --font-nav:     clamp(12px, calc(18px * var(--scale)), 18px);
   --header-pad-v: calc(22px  * var(--scale));
@@ -247,8 +243,11 @@ img { display: block; user-select: none; -webkit-user-drag: none; }
   transition: opacity .35s ease;
 }
 
-.scene-img.pt { width: var(--pt-w); height: var(--pt-h); }
-.scene-img.ls { width: var(--ls-w); height: var(--ls-h); }
+/* Per-image dimensions set via JS: --img-w / --img-h */
+.scene-img {
+  width:  calc(var(--img-w, 327px) * var(--scale));
+  height: calc(var(--img-h, 610px) * var(--scale));
+}
 
 .scene-img img {
   width: 100%;
