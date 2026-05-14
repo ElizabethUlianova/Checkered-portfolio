@@ -58,46 +58,78 @@ const PROJECT_IMAGES = {
   ],
 };
 
-// ─── Scene layout for main page ──────────────────────────────────────────────
-// x, y   = left / top as % of viewport  (image top-left corner)
-// r      = rotation in degrees
-// above  = true → z-index above hero text, false → below
-// p      = parallax strength (higher = moves more = feels closer)
-// or     = 'pt' portrait (155×290) | 'ls' landscape (275×192)
+// ─── Scene layout ─────────────────────────────────────────────────────────────
+//
+// x, y  = pixel offset from VIEWPORT CENTRE to the TOP-LEFT of the image.
+//         (positive x → right, positive y → down)
+// r     = rotation in degrees (slight tilt)
+// above = true → z-index above hero text (z 8), false → below (z 3)
+// p     = parallax depth factor (1.0 = moves with scene, >1 moves a bit more)
+//
+// Image sizes:
+//   pt (portrait)  = 241 × 450 px
+//   ls (landscape) = 806 × 570 px
+//
+// Layout uses 4 horizontal bands separated by ≥ 100 px vertical gaps.
+// Within each band images are placed left→right with exactly 100 px x-gaps.
+//
+//  Band A  tops  ≈ −920   (above viewport)
+//  Band B  tops  ≈ −220   (spans viewport centre — creates text layering)
+//  Band C  tops  ≈  460   (below centre)
+//  Band D  tops  ≈ 1150   (far below viewport)
+//
+// Verified: all inter-image gaps ≥ 100 px in the static (no-pan) state.
+// During mouse panning images with different `p` values will drift slightly
+// relative to each other — this is the intentional depth / parallax effect.
+
 const SCENE_IMAGES = [
-  // ── Left column ──────────────────────────────────────────────────
-  { src:'images/megamarket web main.png',      slug:'megamarket',     or:'ls', x: 1,  y: 5,  r:-1.5, above:false, p:0.50 },
-  { src:'images/megamarket item.png',          slug:'megamarket',     or:'pt', x: 4,  y:36,  r: 2.0, above:true,  p:1.20 },
-  { src:'images/megamarket listing.png',       slug:'megamarket',     or:'pt', x: 1,  y:65,  r:-1.0, above:false, p:0.60 },
 
-  // ── Upper-left ────────────────────────────────────────────────────
-  { src:'images/megamarket lookbook.png',      slug:'megamarket',     or:'pt', x:13,  y: 7,  r: 1.5, above:true,  p:1.00 },
-  { src:'images/braghouse made a brag.png',    slug:'braghouse',      or:'pt', x:23,  y: 2,  r:-1.0, above:false, p:0.70 },
+  // ── Band A ────────────────────────────────────────────────────────────────
+  // A1  LS  right=-494   bottom=-350
+  { src:'images/megamarket web main.png',      slug:'megamarket',     or:'ls', x:-1300, y: -920, r:-1.5, above:false, p:0.92 },
+  // A2  PT  left=-394    right=-153   bottom=-470    gap to A1: 100 px
+  { src:'images/braghouse posts.png',          slug:'braghouse',      or:'pt', x: -394, y: -870, r: 2.0, above:false, p:0.92 },
+  // A3  PT  left=-53     right=188    bottom=-490    gap to A2: 100 px
+  { src:'images/sbermarket profile.png',       slug:'sbermarket',     or:'pt', x:  -53, y: -940, r:-1.0, above:true,  p:1.08 },
+  // A4  PT  left=288     right=529    bottom=-410    gap to A3: 100 px
+  { src:'images/viju movie page app.png',      slug:'viju-streaming', or:'pt', x:  288, y: -860, r: 1.5, above:true,  p:1.08 },
+  // A5  LS  left=629     right=1435   bottom=-360    gap to A4: 100 px
+  { src:'images/vijucms edit movie.png',       slug:'viju-cms',       or:'ls', x:  629, y: -930, r:-2.0, above:false, p:0.92 },
 
-  // ── Lower-left ────────────────────────────────────────────────────
-  { src:'images/megamarket try on app.png',    slug:'megamarket',     or:'pt', x:15,  y:72,  r: 2.0, above:true,  p:1.10 },
-  { src:'images/megamarket main.png',          slug:'megamarket',     or:'ls', x: 3,  y:84,  r:-2.0, above:false, p:0.50 },
+  // ── Band B (spans viewport centre → text layering effect) ─────────────────
+  // B1  LS  right=-644   bottom=340    (top=-230, gap to Band A LS min=-350: 120 px ✓)
+  { src:'images/viju movie page tv.png',       slug:'viju-streaming', or:'ls', x:-1450, y: -230, r: 1.0, above:false, p:0.92 },
+  // B2  PT  left=-544    right=-303   bottom=270     gap to B1: 100 px
+  { src:'images/megamarket item.png',          slug:'megamarket',     or:'pt', x: -544, y: -180, r:-2.0, above:false, p:0.92 },
+  // B3  PT  left=-203    right=38     bottom=230     gap to B2: 100 px  ← behind text
+  { src:'images/megamarket listing.png',       slug:'megamarket',     or:'pt', x: -203, y: -220, r: 2.0, above:true,  p:1.08 },
+  // B4  PT  left=138     right=379    bottom=280     gap to B3: 100 px  ← in front of text
+  { src:'images/braghouse made a brag.png',    slug:'braghouse',      or:'pt', x:  138, y: -170, r:-1.0, above:false, p:0.92 },
+  // B5  LS  left=479     right=1285   bottom=360     gap to B4: 100 px
+  { src:'images/sbermarket scheme.png',        slug:'sbermarket',     or:'ls', x:  479, y: -210, r: 1.5, above:false, p:0.92 },
 
-  // ── Top centre ───────────────────────────────────────────────────
-  { src:'images/braghouse posts.png',          slug:'braghouse',      or:'pt', x:32,  y: 1,  r: 1.0, above:false, p:0.80 },
-  { src:'images/sbermarket profile.png',       slug:'sbermarket',     or:'pt', x:47,  y: 1,  r:-2.0, above:false, p:0.60 },
-  { src:'images/viju movie page tv.png',       slug:'viju-streaming', or:'ls', x:58,  y: 4,  r: 1.0, above:false, p:0.50 },
+  // ── Band C ────────────────────────────────────────────────────────────────
+  // C1  LS  right=-594   bottom=1030  (top=460, gap to Band B LS max bottom=360: 100 px ✓)
+  { src:'images/megamarket main.png',          slug:'megamarket',     or:'ls', x:-1400, y:  460, r:-2.0, above:false, p:0.92 },
+  // C2  PT  left=-494    right=-253   bottom=950     gap to C1: 100 px
+  { src:'images/megamarket lookbook.png',      slug:'megamarket',     or:'pt', x: -494, y:  500, r: 1.5, above:false, p:0.92 },
+  // C3  PT  left=-153    right=88     bottom=930     gap to C2: 100 px
+  { src:'images/braghouse my brags.png',       slug:'braghouse',      or:'pt', x: -153, y:  480, r:-1.0, above:true,  p:1.08 },
+  // C4  PT  left=188     right=429    bottom=960     gap to C3: 100 px
+  { src:'images/viju collections app.png',     slug:'viju-streaming', or:'pt', x:  188, y:  510, r: 2.0, above:true,  p:1.08 },
+  // C5  LS  left=529     right=1335   bottom=1030    gap to C4: 100 px
+  { src:'images/vijucms movies list.png',      slug:'viju-cms',       or:'ls', x:  529, y:  460, r:-1.5, above:false, p:0.92 },
 
-  // ── Bottom centre ────────────────────────────────────────────────
-  { src:'images/vijucms edit kinom.png',       slug:'viju-cms',       or:'ls', x:27,  y:79,  r: 2.0, above:false, p:0.60 },
-  { src:'images/braghouse my brags.png',       slug:'braghouse',      or:'pt', x:38,  y:83,  r:-1.0, above:true,  p:1.00 },
-  { src:'images/vijucms movies list.png',      slug:'viju-cms',       or:'ls', x:56,  y:80,  r:-1.5, above:false, p:0.50 },
-
-  // ── Upper-right ───────────────────────────────────────────────────
-  { src:'images/vijucms edit movie.png',       slug:'viju-cms',       or:'ls', x:79,  y: 2,  r:-1.0, above:false, p:0.60 },
-  { src:'images/viju movie page app.png',      slug:'viju-streaming', or:'pt', x:75,  y:12,  r: 2.0, above:true,  p:1.00 },
-
-  // ── Right column ──────────────────────────────────────────────────
-  { src:'images/sbermarket scheme.png',        slug:'sbermarket',     or:'ls', x:83,  y:27,  r:-2.0, above:false, p:0.70 },
-  { src:'images/viju collections app.png',     slug:'viju-streaming', or:'pt', x:82,  y:47,  r: 1.5, above:true,  p:1.20 },
-
-  // ── Lower-right ───────────────────────────────────────────────────
-  { src:'images/viju playlist app.png',        slug:'viju-streaming', or:'pt', x:70,  y:68,  r:-1.0, above:false, p:0.70 },
-  { src:'images/sbermarket list.png',          slug:'sbermarket',     or:'pt', x:86,  y:70,  r: 2.0, above:true,  p:1.10 },
-  { src:'images/braghouse favorite games.png', slug:'braghouse',      or:'pt', x:57,  y:86,  r:-2.0, above:false, p:0.60 },
+  // ── Band D ────────────────────────────────────────────────────────────────
+  // (top=1150, gap to Band C LS max bottom=1030: 120 px ✓)
+  // D1  PT  left=-1200   right=-959
+  { src:'images/viju playlist app.png',        slug:'viju-streaming', or:'pt', x:-1200, y: 1170, r: 1.0, above:false, p:0.92 },
+  // D2  PT  left=-800    right=-559   gap to D1: 159 px
+  { src:'images/megamarket try on app.png',    slug:'megamarket',     or:'pt', x: -800, y: 1150, r:-2.0, above:false, p:0.92 },
+  // D3  LS  left=-350    right=456    gap to D2: 209 px
+  { src:'images/sbermarket profile managment.png', slug:'sbermarket', or:'ls', x: -350, y: 1180, r: 1.5, above:false, p:0.92 },
+  // D4  PT  left=600     right=841    gap to D3: 144 px
+  { src:'images/braghouse favorite games.png', slug:'braghouse',      or:'pt', x:  600, y: 1160, r:-1.0, above:false, p:0.92 },
+  // D5  PT  left=1000    right=1241   gap to D4: 159 px
+  { src:'images/sbermarket list.png',          slug:'sbermarket',     or:'pt', x: 1000, y: 1150, r: 2.0, above:false, p:0.92 },
 ];

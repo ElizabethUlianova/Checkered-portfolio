@@ -4,23 +4,32 @@
 
 'use strict';
 
-// ─── State ────────────────────────────────────────────────────────────────
-let rawX = 0, rawY = 0;   // normalised mouse pos  -1 … +1
-let curX = 0, curY = 0;   // smoothed (lerped)
-const LERP = 0.072;
+// ─── Pan state ────────────────────────────────────────────────────────────
+// The whole scene pans with mouse movement (like a large canvas).
+// Hero text is position:absolute top/left 50% so it stays viewport-centred.
+// Each image is positioned as: translate(data.x + panX*p, data.y + panY*p).
 
-const TEXT_Z_BELOW = 3;
-const TEXT_Z       = 5;
-const TEXT_Z_ABOVE = 8;
+const PAN_X = 820;   // max horizontal pan in px
+const PAN_Y = 720;   // max vertical pan in px
+const LERP  = 0.07;
+
+let rawPanX = 0, rawPanY = 0;   // target  (set on mousemove)
+let panX    = 0, panY    = 0;   // smoothed (lerped each frame)
+
+const TEXT_BELOW = 3;
+const TEXT_Z     = 5;
+const TEXT_ABOVE = 8;
 
 // ─── Cursor ───────────────────────────────────────────────────────────────
 const $cursor     = document.getElementById('cursor');
 const $cursorText = document.getElementById('cursor-text');
 
-// Direct cursor follow (no lerp – feels more responsive)
 document.addEventListener('mousemove', e => {
-  rawX = (e.clientX / innerWidth  - .5) * 2;
-  rawY = (e.clientY / innerHeight - .5) * 2;
+  // Normalise to -1…+1, then scale to pan range
+  rawPanX = (e.clientX / innerWidth  - 0.5) * 2 * PAN_X;
+  rawPanY = (e.clientY / innerHeight - 0.5) * 2 * PAN_Y;
+
+  // Cursor follows mouse directly (no lerp)
   $cursor.style.left = e.clientX + 'px';
   $cursor.style.top  = e.clientY + 'px';
 });
@@ -36,12 +45,11 @@ function showNotif(msg) {
   notifTimer = setTimeout(() => $notif.classList.remove('show'), 3200);
 }
 
-// ─── Header: dropdown ─────────────────────────────────────────────────────
+// ─── Header ───────────────────────────────────────────────────────────────
 function initHeader() {
   const $btn      = document.getElementById('projects-btn');
   const $dropdown = document.getElementById('projects-dropdown');
 
-  // Populate dropdown links
   PROJECTS.forEach(p => {
     const a = document.createElement('a');
     a.href = `project.html?slug=${p.slug}`;
@@ -54,33 +62,30 @@ function initHeader() {
     e.stopPropagation();
     $dropdown.classList.toggle('open');
   });
-
   document.addEventListener('click', () => $dropdown.classList.remove('open'));
   $dropdown.addEventListener('click', e => e.stopPropagation());
 
-  // LinkedIn
   document.getElementById('linkedin-link').addEventListener('click', () => {
     window.open('https://www.linkedin.com/in/lisaulianova/', '_blank');
   });
 
-  // Email copy
   document.getElementById('email-btn').addEventListener('click', () => {
+    const copy = () => showNotif("email copied. lookin' forward to your mail 👐🏻");
     navigator.clipboard.writeText('elizabethulianova@gmail.com')
-      .then(() => showNotif("email copied. lookin’ forward to your mail 👐🏻"))
+      .then(copy)
       .catch(() => {
-        // fallback for non-https
         const ta = document.createElement('textarea');
         ta.value = 'elizabethulianova@gmail.com';
         document.body.appendChild(ta);
         ta.select();
         document.execCommand('copy');
         ta.remove();
-        showNotif("email copied. lookin’ forward to your mail 👐🏻");
+        copy();
       });
   });
 }
 
-// ─── Scene images ─────────────────────────────────────────────────────────
+// ─── Scene ────────────────────────────────────────────────────────────────
 const imageEls = [];
 
 function initScene() {
@@ -90,61 +95,70 @@ function initScene() {
   SCENE_IMAGES.forEach((data, i) => {
     const wrap = document.createElement('div');
     wrap.className = 'scene-img ' + data.or;
-    wrap.style.left    = data.x + '%';
-    wrap.style.top     = data.y + '%';
-    wrap.style.zIndex  = data.above ? TEXT_Z_ABOVE : TEXT_Z_BELOW;
-    wrap.style.transform = `translate(0,0) rotate(${data.r}deg)`;
+    wrap.style.zIndex = data.above ? TEXT_ABOVE : TEXT_BELOW;
+    // Base position from viewport centre; pan applied in RAF via transform
+    wrap.style.transform = `translate(${data.x}px, ${data.y}px) rotate(${data.r}deg)`;
 
     const img = document.createElement('img');
     img.src = data.src;
     img.alt = (PROJECTS.find(p => p.slug === data.slug) || {}).label || '';
     wrap.appendChild(img);
 
-    // Insert before hero text so stacking context is right
     $scene.insertBefore(wrap, $heroText);
     imageEls.push(wrap);
 
-    // Cursor morph on hover
+    // ── Hover: dim all others, morph cursor ─────────────────────────────
     wrap.addEventListener('mouseenter', () => {
+      // Dim siblings
+      imageEls.forEach(el => {
+        if (el !== wrap) el.classList.add('dimmed');
+      });
+      // Cursor tooltip
       const proj = PROJECTS.find(p => p.slug === data.slug);
       $cursorText.textContent = proj ? proj.label : '';
       $cursor.classList.add('on-image');
     });
+
     wrap.addEventListener('mouseleave', () => {
+      imageEls.forEach(el => el.classList.remove('dimmed'));
       $cursor.classList.remove('on-image');
     });
 
-    // Click → zoom to project
+    // ── Click → zoom → navigate ─────────────────────────────────────────
     wrap.addEventListener('click', () => handleImageClick(wrap, data));
 
     // Staggered reveal
-    setTimeout(() => { wrap.style.opacity = '1'; }, i * 75 + 350);
+    setTimeout(() => { wrap.style.opacity = '1'; }, i * 70 + 300);
   });
 }
 
-// ─── Click → zoom → navigate ──────────────────────────────────────────────
+// ─── Zoom transition ──────────────────────────────────────────────────────
 function handleImageClick(el, data) {
   const rect = el.getBoundingClientRect();
-  const currentTransform = el.style.transform;
 
-  // Store for project page
   sessionStorage.setItem('heroSrc',  data.src);
   sessionStorage.setItem('heroSlug', data.slug);
 
-  // Background overlay (fades in after slight delay to reveal the expanding img)
+  // Background overlay
   const $overlay = document.getElementById('zoom-overlay');
 
-  // Expanding image clone
+  // Expanding clone
   const $clone = document.createElement('img');
   $clone.id  = 'zoom-clone';
   $clone.src = data.src;
-  $clone.style.left   = rect.left + 'px';
-  $clone.style.top    = rect.top  + 'px';
-  $clone.style.width  = rect.width  + 'px';
-  $clone.style.height = rect.height + 'px';
+  $clone.style.cssText = `
+    position:fixed; object-fit:cover; pointer-events:none;
+    z-index:9999; border-radius:6px;
+    left:${rect.left}px; top:${rect.top}px;
+    width:${rect.width}px; height:${rect.height}px;
+    transition: left .68s cubic-bezier(.76,0,.24,1),
+                top  .68s cubic-bezier(.76,0,.24,1),
+                width .68s cubic-bezier(.76,0,.24,1),
+                height .68s cubic-bezier(.76,0,.24,1),
+                border-radius .68s ease;
+  `;
   document.body.appendChild($clone);
 
-  // First frame: kick off transitions
   requestAnimationFrame(() => {
     $overlay.style.opacity = '1';
     requestAnimationFrame(() => {
@@ -161,17 +175,16 @@ function handleImageClick(el, data) {
   }, 700);
 }
 
-// ─── Parallax RAF loop ────────────────────────────────────────────────────
+// ─── RAF: smooth pan + per-image depth shift ──────────────────────────────
 function tick() {
-  curX += (rawX - curX) * LERP;
-  curY += (rawY - curY) * LERP;
+  panX += (rawPanX - panX) * LERP;
+  panY += (rawPanY - panY) * LERP;
 
   imageEls.forEach((el, i) => {
-    const p  = SCENE_IMAGES[i].p;
-    const r  = SCENE_IMAGES[i].r;
-    const dx = curX * p * 38;
-    const dy = curY * p * 38;
-    el.style.transform = `translate(${dx}px,${dy}px) rotate(${r}deg)`;
+    const { x, y, r, p } = SCENE_IMAGES[i];
+    const tx = x + panX * p;
+    const ty = y + panY * p;
+    el.style.transform = `translate(${tx}px, ${ty}px) rotate(${r}deg)`;
   });
 
   requestAnimationFrame(tick);
