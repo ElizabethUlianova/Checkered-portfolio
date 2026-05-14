@@ -20,7 +20,7 @@
   --ls-w:         calc(806px * var(--scale));
   --ls-h:         calc(570px * var(--scale));
   --font-hero:    calc(80px  * var(--scale));
-  --font-nav:     calc(20px  * var(--scale));
+  --font-nav:     clamp(12px, calc(18px * var(--scale)), 18px);
   --header-pad-v: calc(22px  * var(--scale));
   --header-pad-h: calc(28px  * var(--scale));
 }

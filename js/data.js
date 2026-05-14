@@ -107,30 +107,33 @@ const SCENE_IMAGES = [
   { src:'images/vijucms movies list.png',         slug:'viju-cms',       or:'ls', x:  761, y: -250, r:-2.0, above:false },
   { src:'images/viju playlist app.png',           slug:'viju-streaming', or:'pt', x: 1767, y: -270, r: 1.0, above:false },
 
-  // ━━━━ Band 3  (ODD: LS PT PT LS PT PT LS) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  { src:'images/megamarket try on web.png',       slug:'megamarket',     or:'ls', x:-2291, y:  510, r: 1.5, above:false },
-  { src:'images/megamarket lookbook.png',         slug:'megamarket',     or:'pt', x:-1285, y:  540, r:-2.0, above:false },
-  { src:'images/viju create a kinom app.png',     slug:'viju-streaming', or:'pt', x: -844, y:  520, r: 1.0, above:false },
-  { src:'images/viju movie page tv.png',          slug:'viju-streaming', or:'ls', x: -403, y:  500, r:-1.5, above:false },
-  { src:'images/braghouse made a brag.png',       slug:'braghouse',      or:'pt', x:  603, y:  550, r: 2.0, above:false },
-  { src:'images/megamarket main bty.png',         slug:'megamarket',     or:'pt', x: 1044, y:  520, r:-1.0, above:false },
-  { src:'images/sbermarket list.png',             slug:'sbermarket',     or:'ls', x: 1485, y:  530, r: 1.5, above:false },
+  // ━━━━ Band 3  (LS PT LS PT LS PT LS)  4LS+3PT → start x = -2574 ━━━━━━━━━━━━
+  // totalW = 4×806 + 3×241 + 6×200 = 5147 px
+  { src:'images/megamarket try on web.png',       slug:'megamarket',     or:'ls', x:-2574, y:  510, r: 1.5, above:false },
+  { src:'images/megamarket lookbook.png',         slug:'megamarket',     or:'pt', x:-1568, y:  540, r:-2.0, above:false },
+  { src:'images/viju create a kinom app.png',     slug:'viju-streaming', or:'ls', x:-1127, y:  520, r: 1.0, above:false },
+  { src:'images/braghouse made a brag.png',       slug:'braghouse',      or:'pt', x: -121, y:  550, r: 2.0, above:false },
+  { src:'images/viju movie page tv.png',          slug:'viju-streaming', or:'ls', x:  320, y:  520, r:-1.5, above:false },
+  { src:'images/megamarket main bty.png',         slug:'megamarket',     or:'pt', x: 1326, y:  520, r:-1.0, above:false },
+  { src:'images/sbermarket list.png',             slug:'sbermarket',     or:'ls', x: 1767, y:  530, r: 1.5, above:false },
 
-  // ━━━━ Band 4  (EVEN: PT PT LS PT PT LS PT) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  { src:'images/megamarket main fsh.png',         slug:'megamarket',     or:'pt', x:-2009, y: 1280, r:-1.5, above:false },
-  { src:'images/viju kinom playlist.png',         slug:'viju-streaming', or:'pt', x:-1568, y: 1310, r: 2.0, above:false },
-  { src:'images/sbermarket profile managment.png',slug:'sbermarket',     or:'ls', x:-1127, y: 1290, r:-1.0, above:false },
-  { src:'images/megamarket my size.png',          slug:'megamarket',     or:'pt', x: -121, y: 1270, r: 1.5, above:false },
-  { src:'images/megamarket makeup idea.png',      slug:'megamarket',     or:'pt', x:  320, y: 1300, r:-2.0, above:false },
-  { src:'images/vijucms edit kinom.png',          slug:'viju-cms',       or:'ls', x:  761, y: 1300, r: 1.0, above:false },
-  { src:'images/braghouse favorite games.png',    slug:'braghouse',      or:'pt', x: 1767, y: 1320, r:-1.5, above:false },
+  // ━━━━ Band 4  (LS PT PT LS PT PT LS)  3LS+4PT → start x = -2291 ━━━━━━━━━━━
+  // totalW = 3×806 + 4×241 + 6×200 = 4582 px
+  { src:'images/viju kinom playlist.png',         slug:'viju-streaming', or:'ls', x:-2291, y: 1300, r:-1.5, above:false },
+  { src:'images/megamarket main fsh.png',         slug:'megamarket',     or:'pt', x:-1285, y: 1320, r: 2.0, above:false },
+  { src:'images/megamarket my size.png',          slug:'megamarket',     or:'pt', x: -844, y: 1310, r:-1.0, above:false },
+  { src:'images/sbermarket profile managment.png',slug:'sbermarket',     or:'ls', x: -403, y: 1300, r: 1.5, above:false },
+  { src:'images/megamarket makeup idea.png',      slug:'megamarket',     or:'pt', x:  603, y: 1320, r:-2.0, above:false },
+  { src:'images/braghouse favorite games.png',    slug:'braghouse',      or:'pt', x: 1044, y: 1310, r: 1.0, above:false },
+  { src:'images/vijucms edit kinom.png',          slug:'viju-cms',       or:'ls', x: 1485, y: 1300, r:-1.5, above:false },
 
-  // ━━━━ Band 5  (EVEN: PT PT LS PT PT LS PT) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  { src:'images/megamarket post purchase.png',    slug:'megamarket',     or:'pt', x:-2009, y: 2050, r: 1.5, above:false },
-  { src:'images/braghouse favorite genres.png',   slug:'braghouse',      or:'pt', x:-1568, y: 2080, r:-1.0, above:false },
-  { src:'images/megamarket brands.png',           slug:'megamarket',     or:'ls', x:-1127, y: 2060, r: 2.0, above:false },
-  { src:'images/megamarket size guide.png',       slug:'megamarket',     or:'pt', x: -121, y: 2040, r:-1.5, above:false },
-  { src:'images/megamarket try on app.png',       slug:'megamarket',     or:'pt', x:  320, y: 2070, r: 1.0, above:false },
-  { src:'images/vijucms edit image.png',          slug:'viju-cms',       or:'ls', x:  761, y: 2070, r:-2.0, above:false },
-  { src:'images/braghouse one type of tokens.png',slug:'braghouse',      or:'pt', x: 1767, y: 2090, r: 1.5, above:false },
+  // ━━━━ Band 5  (PT PT PT LS PT PT PT)  1LS+6PT → start x = -1726 ━━━━━━━━━━━
+  // totalW = 6×241 + 1×806 + 6×200 = 3452 px
+  { src:'images/megamarket post purchase.png',    slug:'megamarket',     or:'pt', x:-1726, y: 2080, r: 1.5, above:false },
+  { src:'images/braghouse favorite genres.png',   slug:'braghouse',      or:'pt', x:-1285, y: 2100, r:-1.0, above:false },
+  { src:'images/megamarket brands.png',           slug:'megamarket',     or:'pt', x: -844, y: 2075, r: 2.0, above:false },
+  { src:'images/vijucms edit image.png',          slug:'viju-cms',       or:'ls', x: -403, y: 2070, r:-2.0, above:false },
+  { src:'images/megamarket size guide.png',       slug:'megamarket',     or:'pt', x:  603, y: 2090, r:-1.5, above:false },
+  { src:'images/megamarket try on app.png',       slug:'megamarket',     or:'pt', x: 1044, y: 2080, r: 1.0, above:false },
+  { src:'images/braghouse one type of tokens.png',slug:'braghouse',      or:'pt', x: 1485, y: 2100, r: 1.5, above:false },
 ];
