@@ -10,6 +10,19 @@
   --sep:      #C8CDD2;
   --cell:     54px;
   --r-img:    6px;
+
+  /* Responsive scale — set by JS to min(vw/1440, vh/1024) */
+  --scale:    1;
+
+  /* Derived sizes — all relative to 1440×1024 baseline */
+  --pt-w:         calc(241px * var(--scale));
+  --pt-h:         calc(450px * var(--scale));
+  --ls-w:         calc(806px * var(--scale));
+  --ls-h:         calc(570px * var(--scale));
+  --font-hero:    calc(80px  * var(--scale));
+  --font-nav:     calc(20px  * var(--scale));
+  --header-pad-v: calc(22px  * var(--scale));
+  --header-pad-h: calc(28px  * var(--scale));
 }
 
 /* ─── Base ───────────────────────────────────────────────────────────────── */
@@ -112,14 +125,14 @@ img { display: block; user-select: none; -webkit-user-drag: none; }
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
-  padding: 22px 28px;
+  padding: var(--header-pad-v) var(--header-pad-h);
 }
 
 .h-center { text-align: center; }
 .h-right  { text-align: right; }
 
 .nav-link {
-  font-size: 13px;
+  font-size: var(--font-nav);
   font-weight: 400;
   letter-spacing: .02em;
   color: var(--ink);
@@ -136,7 +149,7 @@ img { display: block; user-select: none; -webkit-user-drag: none; }
 }
 
 #projects-btn > span {
-  font-size: 13px;
+  font-size: var(--font-nav);
   font-weight: 400;
   letter-spacing: .02em;
   color: var(--ink);
@@ -204,16 +217,16 @@ img { display: block; user-select: none; -webkit-user-drag: none; }
 }
 
 .hero-name {
-  font-size: 80px;
+  font-size: var(--font-hero);
   font-weight: 600;
   line-height: 1;
   letter-spacing: -.025em;
   color: var(--ink);
-  margin-bottom: 20px;
+  margin-bottom: calc(20px * var(--scale));
 }
 
 .hero-title {
-  font-size: 80px;
+  font-size: var(--font-hero);
   font-weight: 600;
   line-height: 1.06;
   letter-spacing: -.025em;
@@ -234,8 +247,8 @@ img { display: block; user-select: none; -webkit-user-drag: none; }
   transition: opacity .35s ease;
 }
 
-.scene-img.pt { width: 241px; height: 450px; }   /* portrait  ~8:15 */
-.scene-img.ls { width: 806px; height: 570px; }   /* landscape ~10:7 */
+.scene-img.pt { width: var(--pt-w); height: var(--pt-h); }
+.scene-img.ls { width: var(--ls-w); height: var(--ls-h); }
 
 .scene-img img {
   width: 100%;
@@ -392,11 +405,17 @@ body.project-page {
 }
 #no-images.visible { opacity: 1; }
 
+/* ─── Drag cursor ────────────────────────────────────────────────────────── */
+/* While dragging, hide tooltip and scale cursor up slightly */
+body.is-dragging #cursor {
+  transform: translate(-50%, -50%) scale(1.35);
+  transition: transform .15s ease;
+}
+body.is-dragging #cursor .on-image { display: none; }
+
 /* ─── Responsive ─────────────────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .scene-img.pt { width: 160px; height: 300px; }
-  .scene-img.ls { width: 380px; height: 268px; }
-  .hero-name  { font-size: 48px; }
-  .hero-title { font-size: 48px; }
+/* Sizes scale via --scale CSS variable (set by JS), no breakpoints needed.   */
+/* Project gallery collapses to 1 column on narrow viewports. */
+@media (max-width: 700px) {
   #project-gallery { columns: 1; }
 }

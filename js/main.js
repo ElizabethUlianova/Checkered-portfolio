@@ -1,23 +1,30 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    main.js  –  index page
+   Drag canvas to explore; hero text stays centred; images dim on hover.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 'use strict';
 
-// ─── Pan state ────────────────────────────────────────────────────────────
-// The whole scene pans with mouse movement (like a large canvas).
-// Hero text is position:absolute top/left 50% so it stays viewport-centred.
-// Each image is positioned as: translate(data.x + panX*p, data.y + panY*p).
+// ─── Responsive scale ─────────────────────────────────────────────────────
+// All design values are authored for 1440 × 1024 px.
+// --scale shrinks / grows everything proportionally for other viewports.
+let scale = 1;
+function updateScale() {
+  scale = Math.min(window.innerWidth / 1440, window.innerHeight / 1024);
+  document.documentElement.style.setProperty('--scale', scale);
+}
+window.addEventListener('resize', updateScale);
+updateScale();
 
-const PAN_X = 820;   // max horizontal pan in px
-const PAN_Y = 720;   // max vertical pan in px
-const LERP  = 0.07;
-
-let rawPanX = 0, rawPanY = 0;   // target  (set on mousemove)
-let panX    = 0, panY    = 0;   // smoothed (lerped each frame)
+// ─── Drag-to-pan state ────────────────────────────────────────────────────
+let isDragging = false;
+let dragMoved  = false;
+let dragOriginX = 0, dragOriginY = 0;  // clientXY - panXY at drag start
+let panX = 0, panY = 0;                // current canvas offset in screen px
+let velX = 0, velY = 0;                // momentum after release
+const FRICTION = 0.91;
 
 const TEXT_BELOW = 3;
-const TEXT_Z     = 5;
 const TEXT_ABOVE = 8;
 
 // ─── Cursor ───────────────────────────────────────────────────────────────
@@ -25,19 +32,47 @@ const $cursor     = document.getElementById('cursor');
 const $cursorText = document.getElementById('cursor-text');
 
 document.addEventListener('mousemove', e => {
-  // Normalise to -1…+1, then scale to pan range
-  rawPanX = (e.clientX / innerWidth  - 0.5) * 2 * PAN_X;
-  rawPanY = (e.clientY / innerHeight - 0.5) * 2 * PAN_Y;
-
-  // Cursor follows mouse directly (no lerp)
   $cursor.style.left = e.clientX + 'px';
   $cursor.style.top  = e.clientY + 'px';
+
+  if (!isDragging) return;
+
+  const newPanX = e.clientX - dragOriginX;
+  const newPanY = e.clientY - dragOriginY;
+
+  velX = newPanX - panX;
+  velY = newPanY - panY;
+  panX = newPanX;
+  panY = newPanY;
+
+  if (Math.abs(velX) + Math.abs(velY) > 3) dragMoved = true;
+});
+
+document.addEventListener('mousedown', e => {
+  if (e.button !== 0) return;
+  isDragging  = true;
+  dragMoved   = false;
+  dragOriginX = e.clientX - panX;
+  dragOriginY = e.clientY - panY;
+  velX = velY = 0;
+  document.body.classList.add('is-dragging');
+  // Hide tooltip while dragging
+  $cursor.classList.remove('on-image');
+});
+
+document.addEventListener('mouseup', () => {
+  isDragging = false;
+  document.body.classList.remove('is-dragging');
+});
+
+document.addEventListener('mouseleave', () => {
+  isDragging = false;
+  document.body.classList.remove('is-dragging');
 });
 
 // ─── Notification ─────────────────────────────────────────────────────────
 const $notif = document.getElementById('notification');
 let notifTimer;
-
 function showNotif(msg) {
   $notif.textContent = msg;
   $notif.classList.add('show');
@@ -53,15 +88,11 @@ function initHeader() {
   PROJECTS.forEach(p => {
     const a = document.createElement('a');
     a.href = `project.html?slug=${p.slug}`;
-    a.innerHTML =
-      `${p.label}<span class="sep">|</span>${p.type}<span class="sep">|</span>${p.model}`;
+    a.innerHTML = `${p.label}<span class="sep">|</span>${p.type}<span class="sep">|</span>${p.model}`;
     $dropdown.appendChild(a);
   });
 
-  $btn.addEventListener('click', e => {
-    e.stopPropagation();
-    $dropdown.classList.toggle('open');
-  });
+  $btn.addEventListener('click', e => { e.stopPropagation(); $dropdown.classList.toggle('open'); });
   document.addEventListener('click', () => $dropdown.classList.remove('open'));
   $dropdown.addEventListener('click', e => e.stopPropagation());
 
@@ -70,22 +101,15 @@ function initHeader() {
   });
 
   document.getElementById('email-btn').addEventListener('click', () => {
-    const copy = () => showNotif("email copied. lookin' forward to your mail 👐🏻");
-    navigator.clipboard.writeText('elizabethulianova@gmail.com')
-      .then(copy)
-      .catch(() => {
-        const ta = document.createElement('textarea');
-        ta.value = 'elizabethulianova@gmail.com';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        ta.remove();
-        copy();
-      });
+    const done = () => showNotif("email copied. lookin' forward to your mail 👐🏻");
+    navigator.clipboard.writeText('elizabethulianova@gmail.com').then(done).catch(() => {
+      const ta = Object.assign(document.createElement('textarea'), { value: 'elizabethulianova@gmail.com' });
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); done();
+    });
   });
 }
 
-// ─── Scene ────────────────────────────────────────────────────────────────
+// ─── Scene images ─────────────────────────────────────────────────────────
 const imageEls = [];
 
 function initScene() {
@@ -96,24 +120,20 @@ function initScene() {
     const wrap = document.createElement('div');
     wrap.className = 'scene-img ' + data.or;
     wrap.style.zIndex = data.above ? TEXT_ABOVE : TEXT_BELOW;
-    // Base position from viewport centre; pan applied in RAF via transform
-    wrap.style.transform = `translate(${data.x}px, ${data.y}px) rotate(${data.r}deg)`;
 
     const img = document.createElement('img');
     img.src = data.src;
     img.alt = (PROJECTS.find(p => p.slug === data.slug) || {}).label || '';
+    img.draggable = false;
     wrap.appendChild(img);
 
     $scene.insertBefore(wrap, $heroText);
     imageEls.push(wrap);
 
-    // ── Hover: dim all others, morph cursor ─────────────────────────────
+    // ── Hover: dim all others + cursor tooltip ────────────────────────────
     wrap.addEventListener('mouseenter', () => {
-      // Dim siblings
-      imageEls.forEach(el => {
-        if (el !== wrap) el.classList.add('dimmed');
-      });
-      // Cursor tooltip
+      if (isDragging) return;
+      imageEls.forEach(el => { if (el !== wrap) el.classList.add('dimmed'); });
       const proj = PROJECTS.find(p => p.slug === data.slug);
       $cursorText.textContent = proj ? proj.label : '';
       $cursor.classList.add('on-image');
@@ -124,37 +144,34 @@ function initScene() {
       $cursor.classList.remove('on-image');
     });
 
-    // ── Click → zoom → navigate ─────────────────────────────────────────
-    wrap.addEventListener('click', () => handleImageClick(wrap, data));
+    // ── Click → zoom → project page ──────────────────────────────────────
+    wrap.addEventListener('click', () => {
+      if (dragMoved) return;
+      handleImageClick(wrap, data);
+    });
 
     // Staggered reveal
-    setTimeout(() => { wrap.style.opacity = '1'; }, i * 70 + 300);
+    setTimeout(() => { wrap.style.opacity = '1'; }, i * 55 + 250);
   });
 }
 
 // ─── Zoom transition ──────────────────────────────────────────────────────
 function handleImageClick(el, data) {
   const rect = el.getBoundingClientRect();
-
   sessionStorage.setItem('heroSrc',  data.src);
   sessionStorage.setItem('heroSlug', data.slug);
 
-  // Background overlay
   const $overlay = document.getElementById('zoom-overlay');
-
-  // Expanding clone
-  const $clone = document.createElement('img');
+  const $clone   = document.createElement('img');
   $clone.id  = 'zoom-clone';
   $clone.src = data.src;
   $clone.style.cssText = `
-    position:fixed; object-fit:cover; pointer-events:none;
-    z-index:9999; border-radius:6px;
+    position:fixed; object-fit:cover; pointer-events:none; z-index:9999;
+    border-radius:6px;
     left:${rect.left}px; top:${rect.top}px;
     width:${rect.width}px; height:${rect.height}px;
-    transition: left .68s cubic-bezier(.76,0,.24,1),
-                top  .68s cubic-bezier(.76,0,.24,1),
-                width .68s cubic-bezier(.76,0,.24,1),
-                height .68s cubic-bezier(.76,0,.24,1),
+    transition: left .68s cubic-bezier(.76,0,.24,1), top .68s cubic-bezier(.76,0,.24,1),
+                width .68s cubic-bezier(.76,0,.24,1), height .68s cubic-bezier(.76,0,.24,1),
                 border-radius .68s ease;
   `;
   document.body.appendChild($clone);
@@ -162,29 +179,28 @@ function handleImageClick(el, data) {
   requestAnimationFrame(() => {
     $overlay.style.opacity = '1';
     requestAnimationFrame(() => {
-      $clone.style.left         = '0';
-      $clone.style.top          = '0';
-      $clone.style.width        = '100vw';
-      $clone.style.height       = '100vh';
+      $clone.style.left = $clone.style.top = '0';
+      $clone.style.width = '100vw'; $clone.style.height = '100vh';
       $clone.style.borderRadius = '0';
     });
   });
 
-  setTimeout(() => {
-    window.location.href = `project.html?slug=${data.slug}`;
-  }, 700);
+  setTimeout(() => { window.location.href = `project.html?slug=${data.slug}`; }, 700);
 }
 
-// ─── RAF: smooth pan + per-image depth shift ──────────────────────────────
+// ─── RAF: apply momentum + position all images ────────────────────────────
 function tick() {
-  panX += (rawPanX - panX) * LERP;
-  panY += (rawPanY - panY) * LERP;
+  if (!isDragging) {
+    panX += velX; panY += velY;
+    velX *= FRICTION; velY *= FRICTION;
+    if (Math.abs(velX) < 0.2) velX = 0;
+    if (Math.abs(velY) < 0.2) velY = 0;
+  }
 
+  const s = scale;
   imageEls.forEach((el, i) => {
-    const { x, y, r, p } = SCENE_IMAGES[i];
-    const tx = x + panX * p;
-    const ty = y + panY * p;
-    el.style.transform = `translate(${tx}px, ${ty}px) rotate(${r}deg)`;
+    const { x, y, r } = SCENE_IMAGES[i];
+    el.style.transform = `translate(${x * s + panX}px, ${y * s + panY}px) rotate(${r}deg)`;
   });
 
   requestAnimationFrame(tick);
