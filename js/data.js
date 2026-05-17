@@ -106,7 +106,7 @@ const SCENE_IMAGES = [
   // ==== Line 3  (odd, centered, y_c=-1880) ===================================
   { src:'images/viju collections app.png',         slug:'viju-streaming', w: 327, h:610, x:-2172, y:-2185, r:-1.5, d:0.02, above:true  },
   { src:'images/megamarket listing.png',           slug:'megamarket',     w: 327, h:610, x:-1000, y:-2650, r: 1.0, d:0.02, above:false },
-  { src:'images/viju kinom playlist.png',          slug:'viju-streaming', w:1018, h:720, x: -900, y:-1900, r: 2.0, d:0.02, above:true  },
+  { src:'images/viju kinom playlist.png',          slug:'viju-streaming', w:1018, h:720, x: -820, y:-1900, r: 2.0, d:0.02, above:true  },
   { src:'images/braghouse my brags.png',           slug:'braghouse',      w: 327, h:610, x:  700, y:-2400, r:-1.0, d:0.02, above:false },
   { src:'images/vijucms movies list.png',          slug:'viju-cms',       w:1018, h:720, x: 1800, y:-3100, r: 1.5, d:0.02, above:true  },
   { src:'images/viju playlist app.png',            slug:'viju-streaming', w: 327, h:610, x: 1700, y:-1600, r:-2.0, d:0.02, above:false },
@@ -116,7 +116,7 @@ const SCENE_IMAGES = [
   { src:'images/sbermarket profile.png',           slug:'sbermarket',     w:1018, h:720, x: 1600, y:-1320, r:-1.5, d:0.015, above:false },
 
   // ==== CENTER  (y_c=-180, above hero text) ===================================
-  { src:'images/viju create a kinom app.png',      slug:'viju-streaming', w: 726, h:440, x:-1645, y: -900, r:-2.0, d:0.01,  above:true  },
+  { src:'images/viju create a kinom app.png',      slug:'viju-streaming', w: 726, h:440, x:-1870, y:-1050, r:-2.0, d:0.01,  above:true  },
 
   // ==== Line 5  (odd, centered, y_c=600) =====================================
   { src:'images/megamarket try on web.png',        slug:'megamarket',     w:1018, h:720, x:-1900, y:  240, r: 1.5, d:0.015, above:false },
