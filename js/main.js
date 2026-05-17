@@ -1,13 +1,12 @@
-/* ═══════════════════════════════════════════════════════════════════════════
-   main.js  –  index page
-   Drag canvas to explore; hero text stays centred; images dim on hover.
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* =============================================================================
+   main.js  --  index page
+   Drag canvas to explore; subtle mouse parallax; pan bounded 200px past images.
+   ============================================================================= */
 
 'use strict';
 
-// ─── Responsive scale ─────────────────────────────────────────────────────
-// All design values are authored for 1440 × 1024 px.
-// --scale shrinks / grows everything proportionally for other viewports.
+// --- Responsive scale --------------------------------------------------------
+// All design values authored for 1440 x 1024 px.
 let scale = 1;
 function updateScale() {
   scale = Math.min(window.innerWidth / 1440, window.innerHeight / 1024);
@@ -16,22 +15,43 @@ function updateScale() {
 window.addEventListener('resize', updateScale);
 updateScale();
 
-// ─── Drag-to-pan state ────────────────────────────────────────────────────
-let isDragging = false;
-let dragMoved  = false;
-let dragOriginX = 0, dragOriginY = 0;  // clientXY - panXY at drag start
-let panX = 0, panY = 0;                // current canvas offset in screen px
-let velX = 0, velY = 0;                // momentum after release
+// --- Canvas bounding box (at scale 1) ----------------------------------------
+// Derived from SCENE_IMAGES min/max positions.
+const IMG_MIN_X = -2172;   // leftmost image left edge
+const IMG_MAX_X =  2572;   // rightmost image right edge  (x + w)
+const IMG_MIN_Y = -4080;   // topmost image top edge
+const IMG_MAX_Y =  3720;   // bottommost image bottom edge (y + h)
+const PAN_PAD   =  200;    // blank space kept at each canvas edge
+
+function getPanLimits() {
+  const vw = window.innerWidth, vh = window.innerHeight;
+  return {
+    minX: vw / 2 - PAN_PAD - IMG_MAX_X * scale,
+    maxX: PAN_PAD - vw / 2 - IMG_MIN_X * scale,
+    minY: vh / 2 - PAN_PAD - IMG_MAX_Y * scale,
+    maxY: PAN_PAD - vh / 2 - IMG_MIN_Y * scale,
+  };
+}
+
+// --- Drag-to-pan state -------------------------------------------------------
+let isDragging  = false;
+let dragMoved   = false;
+let dragOriginX = 0, dragOriginY = 0;
+let panX = 0, panY = 0;
+let velX = 0, velY = 0;
 const FRICTION = 0.91;
 
-const TEXT_BELOW = 3;
-const TEXT_ABOVE = 8;
+// --- Mouse position (for parallax) ------------------------------------------
+let mouseX = window.innerWidth  / 2;
+let mouseY = window.innerHeight / 2;
 
-// ─── Cursor ───────────────────────────────────────────────────────────────
+// --- Cursor ------------------------------------------------------------------
 const $cursor     = document.getElementById('cursor');
 const $cursorText = document.getElementById('cursor-text');
 
 document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
   $cursor.style.left = e.clientX + 'px';
   $cursor.style.top  = e.clientY + 'px';
 
@@ -39,12 +59,10 @@ document.addEventListener('mousemove', e => {
 
   const newPanX = e.clientX - dragOriginX;
   const newPanY = e.clientY - dragOriginY;
-
   velX = newPanX - panX;
   velY = newPanY - panY;
   panX = newPanX;
   panY = newPanY;
-
   if (Math.abs(velX) + Math.abs(velY) > 3) dragMoved = true;
 });
 
@@ -56,7 +74,6 @@ document.addEventListener('mousedown', e => {
   dragOriginY = e.clientY - panY;
   velX = velY = 0;
   document.body.classList.add('is-dragging');
-  // Hide tooltip while dragging
   $cursor.classList.remove('on-image');
 });
 
@@ -70,7 +87,7 @@ document.addEventListener('mouseleave', () => {
   document.body.classList.remove('is-dragging');
 });
 
-// ─── Notification ─────────────────────────────────────────────────────────
+// --- Notification ------------------------------------------------------------
 const $notif = document.getElementById('notification');
 let notifTimer;
 function showNotif(msg) {
@@ -80,7 +97,7 @@ function showNotif(msg) {
   notifTimer = setTimeout(() => $notif.classList.remove('show'), 3200);
 }
 
-// ─── Header ───────────────────────────────────────────────────────────────
+// --- Header ------------------------------------------------------------------
 function initHeader() {
   const $btn      = document.getElementById('projects-btn');
   const $dropdown = document.getElementById('projects-dropdown');
@@ -109,8 +126,9 @@ function initHeader() {
   });
 }
 
-// ─── Scene images ─────────────────────────────────────────────────────────
+// --- Scene images ------------------------------------------------------------
 const imageEls = [];
+const TEXT_BELOW = 3, TEXT_ABOVE = 8;
 
 function initScene() {
   const $scene    = document.getElementById('scene');
@@ -118,19 +136,21 @@ function initScene() {
 
   SCENE_IMAGES.forEach((data, i) => {
     const wrap = document.createElement('div');
-    wrap.className = 'scene-img ' + data.or;
+    wrap.className = 'scene-img';
     wrap.style.zIndex = data.above ? TEXT_ABOVE : TEXT_BELOW;
+    // Per-image base size -- CSS uses calc(var(--img-w) * var(--scale))
+    wrap.style.setProperty('--img-w', data.w + 'px');
+    wrap.style.setProperty('--img-h', data.h + 'px');
 
     const img = document.createElement('img');
     img.src = data.src;
     img.alt = (PROJECTS.find(p => p.slug === data.slug) || {}).label || '';
     img.draggable = false;
     wrap.appendChild(img);
-
     $scene.insertBefore(wrap, $heroText);
     imageEls.push(wrap);
 
-    // ── Hover: dim all others + cursor tooltip ────────────────────────────
+    // Hover: dim all others + cursor tooltip
     wrap.addEventListener('mouseenter', () => {
       if (isDragging) return;
       imageEls.forEach(el => { if (el !== wrap) el.classList.add('dimmed'); });
@@ -138,24 +158,23 @@ function initScene() {
       $cursorText.textContent = proj ? proj.label : '';
       $cursor.classList.add('on-image');
     });
-
     wrap.addEventListener('mouseleave', () => {
       imageEls.forEach(el => el.classList.remove('dimmed'));
       $cursor.classList.remove('on-image');
     });
 
-    // ── Click → zoom → project page ──────────────────────────────────────
+    // Click -> zoom -> project page
     wrap.addEventListener('click', () => {
       if (dragMoved) return;
       handleImageClick(wrap, data);
     });
 
     // Staggered reveal
-    setTimeout(() => { wrap.style.opacity = '1'; }, i * 55 + 250);
+    setTimeout(() => { wrap.style.opacity = '1'; }, i * 45 + 200);
   });
 }
 
-// ─── Zoom transition ──────────────────────────────────────────────────────
+// --- Zoom transition ---------------------------------------------------------
 function handleImageClick(el, data) {
   const rect = el.getBoundingClientRect();
   sessionStorage.setItem('heroSrc',  data.src);
@@ -188,8 +207,9 @@ function handleImageClick(el, data) {
   setTimeout(() => { window.location.href = `project.html?slug=${data.slug}`; }, 700);
 }
 
-// ─── RAF: apply momentum + position all images ────────────────────────────
+// --- RAF: momentum + pan limits + parallax + position -----------------------
 function tick() {
+  // Momentum
   if (!isDragging) {
     panX += velX; panY += velY;
     velX *= FRICTION; velY *= FRICTION;
@@ -197,16 +217,31 @@ function tick() {
     if (Math.abs(velY) < 0.2) velY = 0;
   }
 
+  // Pan limits -- stop 200px past outermost image on every side
+  const lim = getPanLimits();
+  panX = Math.min(lim.maxX, Math.max(lim.minX, panX));
+  panY = Math.min(lim.maxY, Math.max(lim.minY, panY));
+  if (panX === lim.maxX || panX === lim.minX) velX = 0;
+  if (panY === lim.maxY || panY === lim.minY) velY = 0;
+
+  // Parallax: subtle image shift based on cursor position relative to centre
+  const cx  = window.innerWidth  / 2;
+  const cy  = window.innerHeight / 2;
+  const plx = mouseX - cx;
+  const ply = mouseY - cy;
+
   const s = scale;
   imageEls.forEach((el, i) => {
-    const { x, y, r } = SCENE_IMAGES[i];
-    el.style.transform = `translate(${x * s + panX}px, ${y * s + panY}px) rotate(${r}deg)`;
+    const { x, y, r, d } = SCENE_IMAGES[i];
+    const tx = x * s + panX + plx * d;
+    const ty = y * s + panY + ply * d;
+    el.style.transform = `translate(${tx}px, ${ty}px) rotate(${r}deg)`;
   });
 
   requestAnimationFrame(tick);
 }
 
-// ─── Boot ─────────────────────────────────────────────────────────────────
+// --- Boot -------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
   initHeader();
   initScene();
