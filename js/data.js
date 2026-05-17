@@ -113,7 +113,7 @@ const SCENE_IMAGES = [
 
   // ==== Line 4  (even +400, y_c=-960) ========================================
   { src:'images/megamarket try on app.png',        slug:'megamarket',     w: 327, h:610, x:   50, y:-1150, r: 1.0, d:0.015, above:true  },
-  { src:'images/sbermarket profile.png',           slug:'sbermarket',     w:1018, h:720, x: 1150, y:-1470, r:-1.5, d:0.015, above:false },
+  { src:'images/sbermarket profile.png',           slug:'sbermarket',     w:1018, h:720, x: 1150, y:-1170, r:-1.5, d:0.015, above:false },
 
   // ==== CENTER  (y_c=-180, above hero text) ===================================
   { src:'images/viju create a kinom app.png',      slug:'viju-streaming', w: 726, h:440, x:-1870, y:-1050, r:-2.0, d:0.01,  above:true  },
@@ -138,7 +138,7 @@ const SCENE_IMAGES = [
 
   // ==== Line 8  (even +400, y_c=3360) ========================================
   { src:'images/sbermarket scheme.png',            slug:'sbermarket',     w:1018, h:720, x:-2300, y: 3270, r: 1.5, d:0.04,  above:false },
-  { src:'images/megamarket post purchase.png',     slug:'megamarket',     w: 327, h:610, x: -775, y: 2900, r:-1.0, d:0.04,  above:true  },
+  { src:'images/megamarket post purchase.png',     slug:'megamarket',     w: 327, h:610, x: -925, y: 2900, r:-1.0, d:0.04,  above:true  },
   { src:'images/sbermarket profile managment.png', slug:'sbermarket',     w:1018, h:720, x:  -27, y: 2720, r: 2.0, d:0.04,  above:false },
   { src:'images/megamarket size guide.png',        slug:'megamarket',     w: 327, h:610, x: 1191, y: 3200, r:-1.5, d:0.04,  above:true  },
   { src:'images/braghouse favorite games.png',     slug:'braghouse',      w: 327, h:610, x: 2318, y: 2600, r: 1.0, d:0.04,  above:false },
