@@ -120,7 +120,7 @@ const SCENE_IMAGES = [
 
   // ==== Line 5  (odd, centered, y_c=600) =====================================
   { src:'images/megamarket try on web.png',        slug:'megamarket',     w:1018, h:720, x:-1645, y:  240, r: 1.5, d:0.015, above:false },
-  { src:'images/viju movie page app.png',          slug:'viju-streaming', w: 327, h:610, x: -500, y: -400, r:-1.0, d:0.015, above:false },
+  { src:'images/viju movie page app.png',          slug:'viju-streaming', w: 327, h:610, x: -700, y: -450, r:-1.0, d:0.015, above:false },
   { src:'images/megamarket web main.png',          slug:'megamarket',     w:1018, h:720, x:  100, y:  240, r: 2.0, d:0.015, above:false },
   { src:'images/braghouse one type of tokens.png', slug:'braghouse',      w: 327, h:610, x: 1318, y:  295, r:-1.5, d:0.015, above:false },
 
