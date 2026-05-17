@@ -125,7 +125,7 @@ const SCENE_IMAGES = [
   { src:'images/braghouse one type of tokens.png', slug:'braghouse',      w: 327, h:610, x: 1318, y:  295, r:-1.5, d:0.015, above:true  },
 
   // ==== Line 6  (even +400, y_c=1520) ========================================
-  { src:'images/vijucms edit image.png',           slug:'viju-cms',       w:1018, h:720, x: -900, y: 10, r: 1.0, d:0.02,  above:false },
+  { src:'images/vijucms edit image.png',           slug:'viju-cms',       w:1018, h:720, x: -900, y: 1000, r: 1.0, d:0.02,  above:false },
   { src:'images/megamarket lookbook.png',          slug:'megamarket',     w: 327, h:610, x: -300, y:  400, r:-2.0, d:0.02,  above:true  },
   { src:'images/megamarket my size.png',           slug:'megamarket',     w: 327, h:610, x:  845, y: 1215, r: 1.5, d:0.02,  above:false },
   { src:'images/braghouse favorite genres.png',    slug:'braghouse',      w: 327, h:610, x: 1372, y: 1215, r:-1.0, d:0.02,  above:true  },
