@@ -99,7 +99,7 @@ const SCENE_IMAGES = [
   { src:'images/sbermarket list.png',              slug:'sbermarket',     w:1018, h:720, x: 1500, y:-4150, r:-1.0, d:0.04, above:false },
 
   // ==== Line 2  (even +400, y_c=-2800) =======================================
-  { src:'images/vijucms edit movie.png',           slug:'viju-cms',       w:1018, h:720, x:-2200, y:-3200, r: 1.5, d:0.03, above:false },
+  { src:'images/vijucms edit movie.png',           slug:'viju-cms',       w:1018, h:720, x:-2200, y:-2900, r: 1.5, d:0.03, above:false },
   { src:'images/megamarket main.png',              slug:'megamarket',     w: 327, h:610, x: -100, y:-3105, r:-2.0, d:0.03, above:true  },
   { src:'images/megamarket main bty.png',          slug:'megamarket',     w: 327, h:610, x:  900, y:-3400, r: 1.0, d:0.03, above:false },
 
