@@ -113,19 +113,19 @@ const SCENE_IMAGES = [
 
   // ==== Line 4  (even +400, y_c=-960) ========================================
   { src:'images/megamarket try on app.png',        slug:'megamarket',     w: 327, h:610, x:   50, y:-1150, r: 1.0, d:0.015, above:true  },
-  { src:'images/sbermarket profile.png',           slug:'sbermarket',     w:1018, h:720, x: 1600, y:-1320, r:-1.5, d:0.015, above:false },
+  { src:'images/sbermarket profile.png',           slug:'sbermarket',     w:1018, h:720, x: 1150, y:-1470, r:-1.5, d:0.015, above:false },
 
   // ==== CENTER  (y_c=-180, above hero text) ===================================
   { src:'images/viju create a kinom app.png',      slug:'viju-streaming', w: 726, h:440, x:-1870, y:-1050, r:-2.0, d:0.01,  above:true  },
 
   // ==== Line 5  (odd, centered, y_c=600) =====================================
-  { src:'images/megamarket try on web.png',        slug:'megamarket',     w:1018, h:720, x:-1900, y:  240, r: 1.5, d:0.015, above:false },
+  { src:'images/megamarket try on web.png',        slug:'megamarket',     w:1018, h:720, x:-2100, y:  240, r: 1.5, d:0.015, above:false },
   { src:'images/viju movie page app.png',          slug:'viju-streaming', w: 327, h:610, x: -800, y: -450, r:-1.0, d:0.015, above:true  },
   { src:'images/megamarket web main.png',          slug:'megamarket',     w:1018, h:720, x:  300, y: -240, r: 2.0, d:0.015, above:false },
   { src:'images/braghouse one type of tokens.png', slug:'braghouse',      w: 327, h:610, x: 2050, y:   70, r:-1.5, d:0.015, above:true  },
 
   // ==== Line 6  (even +400, y_c=1520) ========================================
-  { src:'images/vijucms edit image.png',           slug:'viju-cms',       w:1018, h:720, x: -900, y: 1000, r: 1.0, d:0.02,  above:false },
+  { src:'images/vijucms edit image.png',           slug:'viju-cms',       w:1018, h:720, x:-1050, y: 1100, r: 1.0, d:0.02,  above:false },
   { src:'images/megamarket lookbook.png',          slug:'megamarket',     w: 327, h:610, x: -300, y:  350, r:-2.0, d:0.02,  above:true  },
   { src:'images/megamarket my size.png',           slug:'megamarket',     w: 327, h:610, x:  845, y:  700, r: 1.5, d:0.02,  above:false },
   { src:'images/braghouse favorite genres.png',    slug:'braghouse',      w: 327, h:610, x: 2000, y: 1100, r:-1.0, d:0.02,  above:true  },
@@ -137,7 +137,7 @@ const SCENE_IMAGES = [
   { src:'images/vijucms edit kinom.png',           slug:'viju-cms',       w:1018, h:720, x:  400, y: 1600, r:-2.0, d:0.03,  above:true  },
 
   // ==== Line 8  (even +400, y_c=3360) ========================================
-  { src:'images/sbermarket scheme.png',            slug:'sbermarket',     w:1018, h:720, x:-2000, y: 3200, r: 1.5, d:0.04,  above:false },
+  { src:'images/sbermarket scheme.png',            slug:'sbermarket',     w:1018, h:720, x:-2200, y: 3120, r: 1.5, d:0.04,  above:false },
   { src:'images/megamarket post purchase.png',     slug:'megamarket',     w: 327, h:610, x: -704, y: 2800, r:-1.0, d:0.04,  above:true  },
   { src:'images/sbermarket profile managment.png', slug:'sbermarket',     w:1018, h:720, x:  -27, y: 2720, r: 2.0, d:0.04,  above:false },
   { src:'images/megamarket size guide.png',        slug:'megamarket',     w: 327, h:610, x: 1191, y: 3055, r:-1.5, d:0.04,  above:true  },
