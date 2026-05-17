@@ -108,11 +108,11 @@ const SCENE_IMAGES = [
   { src:'images/megamarket listing.png',           slug:'megamarket',     w: 327, h:610, x:-1000, y:-2800, r: 1.0, d:0.02, above:false },
   { src:'images/viju kinom playlist.png',          slug:'viju-streaming', w:1018, h:720, x: -900, y:-1900, r: 2.0, d:0.02, above:true  },
   { src:'images/braghouse my brags.png',           slug:'braghouse',      w: 327, h:610, x:  700, y:-2400, r:-1.0, d:0.02, above:false },
-  { src:'images/vijucms movies list.png',          slug:'viju-cms',       w:1018, h:720, x: 1600, y:-3100, r: 1.5, d:0.02, above:true  },
-  { src:'images/viju playlist app.png',            slug:'viju-streaming', w: 327, h:610, x: 1700, y:-2500, r:-2.0, d:0.02, above:false },
+  { src:'images/vijucms movies list.png',          slug:'viju-cms',       w:1018, h:720, x: 1800, y:-3100, r: 1.5, d:0.02, above:true  },
+  { src:'images/viju playlist app.png',            slug:'viju-streaming', w: 327, h:610, x: 1700, y:-1600, r:-2.0, d:0.02, above:false },
 
   // ==== Line 4  (even +400, y_c=-960) ========================================
-  { src:'images/megamarket try on app.png',        slug:'megamarket',     w: 327, h:610, x: 1200, y:-1400, r: 1.0, d:0.015, above:true  },
+  { src:'images/megamarket try on app.png',        slug:'megamarket',     w: 327, h:610, x:   50, y:-1150, r: 1.0, d:0.015, above:true  },
   { src:'images/sbermarket profile.png',           slug:'sbermarket',     w:1018, h:720, x: 1600, y:-1320, r:-1.5, d:0.015, above:false },
 
   // ==== CENTER  (y_c=-180, above hero text) ===================================
@@ -126,12 +126,12 @@ const SCENE_IMAGES = [
 
   // ==== Line 6  (even +400, y_c=1520) ========================================
   { src:'images/vijucms edit image.png',           slug:'viju-cms',       w:1018, h:720, x: -900, y: 1000, r: 1.0, d:0.02,  above:false },
-  { src:'images/megamarket lookbook.png',          slug:'megamarket',     w: 327, h:610, x: -300, y:  250, r:-2.0, d:0.02,  above:true  },
+  { src:'images/megamarket lookbook.png',          slug:'megamarket',     w: 327, h:610, x: -300, y:  350, r:-2.0, d:0.02,  above:true  },
   { src:'images/megamarket my size.png',           slug:'megamarket',     w: 327, h:610, x:  845, y: 1215, r: 1.5, d:0.02,  above:false },
   { src:'images/braghouse favorite genres.png',    slug:'braghouse',      w: 327, h:610, x: 2000, y: 1100, r:-1.0, d:0.02,  above:true  },
 
   // ==== Line 7  (odd, centered, y_c=2440) ====================================
-  { src:'images/megamarket brands.png',            slug:'megamarket',     w: 327, h:610, x:-1300, y: 2135, r: 2.0, d:0.03,  above:false },
+  { src:'images/megamarket brands.png',            slug:'megamarket',     w: 327, h:610, x:-1700, y: 1735, r: 2.0, d:0.03,  above:false },
   { src:'images/braghouse posts.png',              slug:'braghouse',      w: 327, h:610, x: -773, y: 2135, r:-1.5, d:0.03,  above:true  },
   { src:'images/megamarket main fsh.png',          slug:'megamarket',     w: 327, h:610, x: -246, y: 2135, r: 1.0, d:0.03,  above:false },
   { src:'images/vijucms edit kinom.png',           slug:'viju-cms',       w:1018, h:720, x:  281, y: 2080, r:-2.0, d:0.03,  above:true  },
@@ -141,6 +141,6 @@ const SCENE_IMAGES = [
   { src:'images/megamarket post purchase.png',     slug:'megamarket',     w: 327, h:610, x: -554, y: 2800, r:-1.0, d:0.04,  above:true  },
   { src:'images/sbermarket profile managment.png', slug:'sbermarket',     w:1018, h:720, x:  -27, y: 2900, r: 2.0, d:0.04,  above:false },
   { src:'images/megamarket size guide.png',        slug:'megamarket',     w: 327, h:610, x: 1191, y: 3055, r:-1.5, d:0.04,  above:true  },
-  { src:'images/braghouse favorite games.png',     slug:'braghouse',      w: 327, h:610, x: 1718, y: 3055, r: 1.0, d:0.04,  above:false },
+  { src:'images/braghouse favorite games.png',     slug:'braghouse',      w: 327, h:610, x: 2318, y: 2600, r: 1.0, d:0.04,  above:false },
   { src:'images/megamarket makeup idea.png',       slug:'megamarket',     w: 327, h:610, x: 1700, y: 2135, r:-2.0, d:0.04,  above:true  },
 ];
