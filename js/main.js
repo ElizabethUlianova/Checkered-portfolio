@@ -174,37 +174,14 @@ function initScene() {
   });
 }
 
-// --- Zoom transition ---------------------------------------------------------
+// --- Fade transition ---------------------------------------------------------
 function handleImageClick(el, data) {
-  const rect = el.getBoundingClientRect();
   sessionStorage.setItem('heroSrc',  data.src);
   sessionStorage.setItem('heroSlug', data.slug);
 
   const $overlay = document.getElementById('zoom-overlay');
-  const $clone   = document.createElement('img');
-  $clone.id  = 'zoom-clone';
-  $clone.src = data.src;
-  $clone.style.cssText = `
-    position:fixed; object-fit:cover; pointer-events:none; z-index:9999;
-    border-radius:6px;
-    left:${rect.left}px; top:${rect.top}px;
-    width:${rect.width}px; height:${rect.height}px;
-    transition: left .68s cubic-bezier(.76,0,.24,1), top .68s cubic-bezier(.76,0,.24,1),
-                width .68s cubic-bezier(.76,0,.24,1), height .68s cubic-bezier(.76,0,.24,1),
-                border-radius .68s ease;
-  `;
-  document.body.appendChild($clone);
-
-  requestAnimationFrame(() => {
-    $overlay.style.opacity = '1';
-    requestAnimationFrame(() => {
-      $clone.style.left = $clone.style.top = '0';
-      $clone.style.width = '100vw'; $clone.style.height = '100vh';
-      $clone.style.borderRadius = '0';
-    });
-  });
-
-  setTimeout(() => { window.location.href = `project.html?slug=${data.slug}`; }, 700);
+  requestAnimationFrame(() => { $overlay.style.opacity = '1'; });
+  setTimeout(() => { window.location.href = `project.html?slug=${data.slug}`; }, 380);
 }
 
 // --- RAF: momentum + pan limits + parallax + position -----------------------

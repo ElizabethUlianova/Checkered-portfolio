@@ -57,6 +57,49 @@ const PROJECT_IMAGES = {
   ],
 };
 
+// --- Text blocks per project (overview / details / more) ---------------------
+const PROJECT_TEXT = {
+  megamarket: {
+    overview: {
+      heading: 'overview',
+      body: "It's a multi-category marketplace🛒. Before I joined, every category followed the same generic product-list approach with no real shopping experience. I led the design for the fashion vertical — building it from scratch into a dedicated fashion destination with editorial content, outfit inspiration, brand storytelling, and personalised recommendations. My work helped grow the category from near-zero to a meaningful share of GMV.",
+    },
+    details: {
+      heading: 'details',
+      body: "The marketplace transformation began with a deep audit of the existing user experience and business model. I mapped the full customer journey across discovery, browsing, and purchase — identifying friction points and missed opportunities. Working closely with product managers, analysts, and engineers, I redesigned the core shopping flows: category pages, product cards, and checkout. Each iteration was validated with user research and A/B testing, ensuring design decisions were grounded in real behaviour.",
+    },
+    more: {
+      heading: 'more about it',
+      body: "When I joined the Megamarket team, the design processes were slow and unstructured. I introduced a component-based design system that cut delivery time significantly and gave engineers a reliable source of truth. I also ran weekly design critiques, brought in usability testing as a standard practice, and mentored two junior designers. Beyond shipping product, I helped shift how the team thought about design — from pixel-pushing to strategic problem-solving.",
+    },
+  },
+  avito: {
+    overview: { heading: 'overview', body: '' },
+    details:  { heading: 'details',  body: '' },
+    more:     { heading: 'more about it', body: '' },
+  },
+  'viju-streaming': {
+    overview: { heading: 'overview', body: '' },
+    details:  { heading: 'details',  body: '' },
+    more:     { heading: 'more about it', body: '' },
+  },
+  'viju-cms': {
+    overview: { heading: 'overview', body: '' },
+    details:  { heading: 'details',  body: '' },
+    more:     { heading: 'more about it', body: '' },
+  },
+  braghouse: {
+    overview: { heading: 'overview', body: '' },
+    details:  { heading: 'details',  body: '' },
+    more:     { heading: 'more about it', body: '' },
+  },
+  sbermarket: {
+    overview: { heading: 'overview', body: '' },
+    details:  { heading: 'details',  body: '' },
+    more:     { heading: 'more about it', body: '' },
+  },
+};
+
 // --- Scene layout: 34 images, 8 staggered rows + 1 center image ---------------
 //
 // Layout per reference schematic (left-to-right, top-to-bottom):

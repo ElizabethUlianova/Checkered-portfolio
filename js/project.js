@@ -126,17 +126,55 @@ function initProject() {
   const $noImages = document.getElementById('no-images');
 
   const galleryImages = allImages.filter(src => src !== heroImage);
+  const projectText   = PROJECT_TEXT[slug] || {};
+
+  function makeTextBlock(key) {
+    const data = projectText[key];
+    if (!data || (!data.heading && !data.body)) return null;
+    const block = document.createElement('div');
+    block.className = 'text-block';
+    const h = document.createElement('p');
+    h.className = 'text-block__heading';
+    h.textContent = data.heading || '';
+    const b = document.createElement('p');
+    b.className = 'text-block__body';
+    b.textContent = data.body || '';
+    block.appendChild(h);
+    block.appendChild(b);
+    return block;
+  }
 
   if (galleryImages.length === 0 && !heroImage) {
     $noImages.classList.add('visible');
   } else {
-    galleryImages.forEach(src => {
+    // Insert overview block first
+    const overviewBlock = makeTextBlock('overview');
+    if (overviewBlock) $gallery.appendChild(overviewBlock);
+
+    galleryImages.forEach((src, idx) => {
+      // Insert details block after 2nd image (index 1, i.e. before 3rd item)
+      if (idx === 2) {
+        const detailsBlock = makeTextBlock('details');
+        if (detailsBlock) $gallery.appendChild(detailsBlock);
+      }
+      // Insert more block after 4th image (index 3, i.e. before 5th item)
+      if (idx === 4) {
+        const moreBlock = makeTextBlock('more');
+        if (moreBlock) $gallery.appendChild(moreBlock);
+      }
+
       const item = document.createElement('div');
       item.className = 'gallery-item';
       const img = document.createElement('img');
       img.src     = src;
       img.alt     = project.label;
       img.loading = 'lazy';
+      // Detect orientation after load and mark landscape items
+      img.addEventListener('load', () => {
+        if (img.naturalWidth > img.naturalHeight) {
+          item.classList.add('landscape');
+        }
+      }, { once: true });
       item.appendChild(img);
       $gallery.appendChild(item);
     });
