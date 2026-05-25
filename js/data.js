@@ -11,20 +11,20 @@ const PROJECTS = [
 // --- All images per project (project detail page) ----------------------------
 const PROJECT_IMAGES = {
   megamarket: [
-    'images/megamarket main.png',
-    'images/megamarket web main.png',
-    'images/megamarket item.png',
-    'images/megamarket listing.png',
-    'images/megamarket lookbook.png',
-    'images/megamarket brands.png',
-    'images/megamarket main bty.png',
-    'images/megamarket main fsh.png',
-    'images/megamarket makeup idea.png',
-    'images/megamarket my size.png',
-    'images/megamarket post purchase.png',
-    'images/megamarket size guide.png',
-    'images/megamarket try on app.png',
-    'images/megamarket try on web.png',
+    'images/megamarket web main.png',      // default hero
+    'images/megamarket main.png',          // row 1
+    'images/megamarket item.png',          // row 1
+    'images/megamarket listing.png',       // row 2
+    'images/megamarket post purchase.png', // row 2
+    'images/megamarket main fsh.png',      // row 3
+    'images/megamarket lookbook.png',      // row 3
+    'images/megamarket size guide.png',    // row 4
+    'images/megamarket my size.png',       // row 4
+    'images/megamarket main bty.png',      // row 5
+    'images/megamarket brands.png',        // row 5
+    'images/megamarket try on web.png',    // row 6 (landscape)
+    'images/megamarket try on app.png',    // row 7
+    'images/megamarket makeup idea.png',   // row 7
   ],
   avito: [],
   'viju-streaming': [

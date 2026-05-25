@@ -179,12 +179,13 @@ function initProject() {
     document.getElementById('project-info').classList.add('visible');
   }, 200);
 
-  // ── Gallery ─────────────────────────────────────────────────────────────
+  // ── Gallery (built after hero loads so we know its orientation) ──────────
   const $gallery  = document.getElementById('project-gallery');
   const $noImages = document.getElementById('no-images');
+  const projectText = PROJECT_TEXT[slug] || {};
 
-  const galleryImages = allImages.filter(src => src !== heroImage);
-  const projectText   = PROJECT_TEXT[slug] || {};
+  // Images that should never get left padding
+  const NO_PADDING_SRCS = ['viju movie page tv.png', 'viju create a kinom app.png'];
 
   function makeTextBlock(key) {
     const data = projectText[key];
@@ -202,52 +203,94 @@ function initProject() {
     return block;
   }
 
-  // Images that should never get left padding
-  const NO_PADDING_SRCS = ['viju movie page tv.png', 'viju create a kinom app.png'];
+  function buildGallery(heroIsPortrait) {
+    if (allImages.length === 0 && !heroImage) {
+      $noImages.classList.add('visible');
+      return;
+    }
 
-  if (galleryImages.length === 0 && !heroImage) {
-    $noImages.classList.add('visible');
-  } else {
-    // Overview block before all images
+    const defaultHero = allImages[0];
+    // Default gallery order = allImages without the default hero
+    const defaultGallery = allImages.filter(s => s !== defaultHero);
+
+    let gallery = allImages.filter(s => s !== heroImage);
+
+    if (heroIsPortrait) {
+      // Find the partner of the hero in the default paired layout
+      const hi = defaultGallery.indexOf(heroImage);
+      if (hi >= 0) {
+        const partnerIdx = hi % 2 === 0 ? hi + 1 : hi - 1;
+        const partner = (partnerIdx >= 0 && partnerIdx < defaultGallery.length)
+          ? defaultGallery[partnerIdx] : null;
+
+        if (partner && partner !== defaultHero) {
+          // Move partner to front – it will be alone in row 1 and centered
+          gallery = [partner, ...gallery.filter(s => s !== partner)];
+        }
+      }
+    } else if (heroImage !== defaultHero) {
+      // Landscape non-default hero: default image moves to position 1
+      const di = gallery.indexOf(defaultHero);
+      if (di > 1) {
+        gallery.splice(di, 1);
+        gallery.splice(1, 0, defaultHero);
+      }
+    }
+
+    // Overview text block first
     const overviewBlock = makeTextBlock('overview');
     if (overviewBlock) $gallery.appendChild(overviewBlock);
 
-    galleryImages.forEach((src, idx) => {
-      // Details block after 5th image (before 6th)
+    const galleryItemEls = [];
+
+    gallery.forEach((src, idx) => {
       if (idx === 5) {
-        const detailsBlock = makeTextBlock('details');
-        if (detailsBlock) $gallery.appendChild(detailsBlock);
+        const b = makeTextBlock('details');
+        if (b) $gallery.appendChild(b);
       }
-      // More block after 9th image (before 10th)
       if (idx === 9) {
-        const moreBlock = makeTextBlock('more');
-        if (moreBlock) $gallery.appendChild(moreBlock);
+        const b = makeTextBlock('more');
+        if (b) $gallery.appendChild(b);
       }
 
       const item = document.createElement('div');
       item.className = 'gallery-item';
 
-      // Mark exception images (no padding) based on filename
       const filename = src.split('/').pop();
-      if (NO_PADDING_SRCS.includes(filename)) {
-        item.classList.add('no-padding');
-      }
+      if (NO_PADDING_SRCS.includes(filename)) item.classList.add('no-padding');
 
       const img = document.createElement('img');
       img.src     = src;
       img.alt     = project.label;
       img.loading = 'lazy';
-      // Detect orientation after load and mark landscape items
       img.addEventListener('load', () => {
-        if (img.naturalWidth > img.naturalHeight) {
-          item.classList.add('landscape');
-        }
+        if (img.naturalWidth > img.naturalHeight) item.classList.add('landscape');
       }, { once: true });
+
       item.appendChild(img);
       $gallery.appendChild(item);
+      galleryItemEls.push(item);
     });
 
+    // Portrait hero: first gallery item is the lone partner → center it
+    if (heroIsPortrait && galleryItemEls.length > 0) {
+      galleryItemEls[0].classList.add('alone');
+    }
+
     setTimeout(() => $gallery.classList.add('visible'), 380);
+  }
+
+  // Trigger gallery build once we know hero orientation
+  function onHeroReady() {
+    const heroIsPortrait = $hero.naturalHeight > $hero.naturalWidth;
+    buildGallery(heroIsPortrait);
+  }
+
+  if (heroImage) {
+    if ($hero.complete && $hero.naturalWidth > 0) onHeroReady();
+    else $hero.addEventListener('load', onHeroReady, { once: true });
+  } else {
+    buildGallery(false);
   }
 }
 
